@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['localhost', '10.1.10.129', 'devcomp']
 # Application definition
 
 INSTALLED_APPS = [
+    'netunix',
     'bootstrap3_datetime',
     'crm_app',
     'accounts',

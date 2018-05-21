@@ -1,0 +1,77 @@
+{% block multi-page-new-ticket %}
+<form method=POST action="{% url 'accounts:create_ticket' %}">
+    {% csrf_token %}
+   
+
+    <fieldset id="first">
+        <h2>Enter new ticket title</h2>
+        {{ ticket.ticket_title }}
+        
+        <div class="container" style="padding:30px";>
+        {% include 'crm_app/form_templates/datepicker_modal.html' with a=ticket.ticketstartdate %}
+        </div>
+        
+        <h2>Tecnhician</h2> 
+        {{ ticket.technician }}
+        
+        <h2>Client name</h2>
+        {{ ticket.clientid }}
+
+        <h2>Send Complete Email To:</h2>
+        <div id="hotness">
+        </div>
+
+        <h2>Contact name</h2>
+        {{ ticket.contact_name }}
+        
+        
+        <h2>Work type</h2>
+        {{ ticket.worktype }}
+        
+        <h2>Ticket status</h2>
+        {{ ticket.ticket_status }}
+        (timestamp **needs to be hidden)
+        {{ ticket.timestamp }}
+        <input class="next_btn" type="button" value="Next">
+    </fieldset>
+   
+    
+    <fieldset>
+        <h4>for debugging</h4>
+        {{ tid.ticketid }}
+        {{ entries.timestamp }}
+        <h2>Entry details</h2>
+        <h3>Technician</h3>
+        {{ entries.technician }}        
+        <h3>Work Type</h3>
+        {{ entries.worktype }}
+        <h3>Notes</h3>
+        {{ entries.notes }}
+        <h3>Total Time Spent On Ticket</h3>    
+        {{ ticket.time_spent_minutes_field }}
+        <div class='container'>
+        {% include 'accounts/form_templates/datepicker_modal.html' with a=entries.startdate %}
+   
+        {% include 'accounts/form_templates/datepicker_modal.html' with a=entries.enddate %}
+        </div>
+
+        <button style="background-color:green; margin:5em;" class="btn btn-lg" type='submit'>Submit</button>
+
+        <button type='submit'>Submit</button>
+    </fieldset>
+       
+</form>
+{% endblock %}
+
+ 
+
+
+
+
+
+
+
+
+
+
+

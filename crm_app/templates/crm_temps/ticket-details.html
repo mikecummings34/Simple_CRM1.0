@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="row" id="status_row" style="background-color:lightgray;">
+	<div class='col-sm-6'>
+		<h3 style="display:inline;">{{ tickets.ticket_title }}</h3>
+		<div class="status_class">
+		<h3 style="display:inline;">Status:</h3>
+		{% if tickets.ticket_status == 1 %}
+		<h3 style="color:red; display:inline;">Call Recieved</h3>
+		{% elif tickets.ticket_status == 2 %}
+		<h3 style="color:yellow; display:inline;">In Progress</h3>
+		{% elif tickets.ticket_status == 3 %}
+		<h3 style="color:blue; display:inline;">Waiting Customer</h3>
+		{% elif tickets.ticket_status == 4 %}
+		<h3 style="color:blue; display:inline;">Waiting Vendor</h3>
+		{% elif tickets.ticket_status == 5 %}
+		<h3 style="color:green; display:inline;">Complete</h3>
+		{% endif %}
+	</div>
+	</div>
+</div>
+<div class="row">
+	<div class='col-sm-3'>
+		<h4 class='ticket_header-field'>Ticket Start Date: </h4>
+		<h4 class='ticket_header-field'>Ticket Initiated by: </h4>
+		<h4 class='ticket_header-field'>Total Time spent: </h4>
+		<h4 class='ticket_header-field'>Client: </h4>
+		<h4 class='ticket_header-field'>Contact Name: </h4>
+	</div>
+	<div class='col-sm-3'>
+		<h4>{{ tickets.ticketstartdate }}</h4>
+		<h4>{{ tickets.technician }}</h4>
+		<h4>{{ tickets.time_spent_minutes_field }} minutes</h4>
+		<h4>{{ tickets.clientid }}</h4>
+		<h4>{{ tickets.contact_name }}</h4>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<h4>Ticket Entries</h4>
+
+{% for entries in entries %}
+<div class="container" id="entrycontainer">
+{{ entries.startdate }} {{ entries.enddate }} <br/>
+{{ entries.worktype }}<br/>
+<h5 class="tech">{{ entries.technician }}<br/></h5>
+{{ entries.notes }} <br />
+</div>
+{% endfor %}
+<form method="GET" action="{% url 'crm:new_entry' %}">
+	<button type="btn btn-default" value="{{ tickets.oid }}" name="editticket">Add New Time Entry</button>
+</form>
+
+<script>
+	$('#entrycontainer > .tech').each(function(){
+		var techname = $(this).text();
+		if( techname == 'Mike') {
+			$('#entrycontainer').attr('style','border-left:solid rgb(125,154,59,1) 10px');
+		}
+		if( techname == 'Ross') {
+			$('#entrycontainer').attr('style','border-left:solid lightgrey 4px');
+		}
+		if( techname == 'Marcus') {
+			$('#entrycontainer').attr('style','border-left:solid lightblue 4px');
+		}
+		if( techname == 'Aaron') {
+			$('#entrycontainer').attr('style','border-left:solid maroon 4px');
+		}
+	});
+
+</script>
+
+{% endblock %}

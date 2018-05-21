@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<form method="POST" action="{%  url 'accounts:edit_ticket' %}">
+ {{ ticket.ticket_title }}
+
+ {% for timeentries in timeentries %}
+ {{ timeentries.notes }}
+ {% endfor %}
+
+</form>
+{% endblock %}

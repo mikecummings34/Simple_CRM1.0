@@ -1,7 +1,7 @@
 {% block tickettable %}
 <div class="ticket_wall" id="ticket_window">
 	
-	<form method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
+	<form id='ff' method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
 		<div class="tckt_container" id="ticket_container">		
 			<div class="ticket_table" id="table">
 				<div class="container" id="tablebody">
@@ -20,7 +20,8 @@
 				            <td>{{ tickets.ticket_title }}</td>
 				            <td>{{ tickets.ticketstartdate }}</td>
 				            <td>{{ tickets.ticket_status }}</td>
-				            <td><a name='ticket' value="{{ tickets.oid }}" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">check</i></a></td>
+				            <td><button value="{{ tickets.oid }}" name="ticket" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">check</i></button></td>
+
 	          			</tr>
 	          			{% endfor %}
 	        			</tbody>
@@ -32,10 +33,6 @@
 </div>
 
 <script>
-	$(document).ready(function(){
-		$('.btn-floating').click(function(){
-			$('.btn-floating').submit();
-		})
-	})
+	
 </script>
 {% endblock %}

@@ -24,6 +24,8 @@ from accounts import views as accountview
 urlpatterns = [
 	url(r'^$', views.view_profile, name = 'view_profile'),
 	url(r'^tickets/details/$', views.ticket_detail, name='ticket_detail'),
+	url(r'^tickets/new-entry/$', views.new_entry, name='new_entry'),
+	
 
 
 

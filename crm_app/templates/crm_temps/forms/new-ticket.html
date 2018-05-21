@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}
+<h3>New Ticket</h3>
+{% endblock %}
+{% block body %}
+{% block multi-page-new-ticket %}
+{% include 'crm_app/forms/multi-page-new-ticket.html' %}
+{% endblock %}
+
+<a id="ajax_url" href="{% url 'accounts:ajax_req' %}"></a>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    $('#id_clientid').change(function(event){
+        if($("#hotness").children().length) {
+          $("#hotness").empty();
+            ajaxEmail();
+        } else {
+            ajaxEmail();
+        }
+    });
+        function ajaxEmail () {    
+        var urls = $('#ajax_url').attr('href');
+        var  clientid = $('#id_clientid');
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: urls,
+            data: {
+                'clientid' : $('#id_clientid').val(), csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(result) {
+                $.each(result, function(index, value) {
+                    $('#id_contact_name')
+                        .append($("<option></option>")
+                                .attr("value",value.fields.contactname)
+                                .text(value.fields.contactname));
+                });
+                $.each(result, function(index, value){
+                    if($('.input'))
+                    if (value.fields.sendticketcompleteemail == true) {
+                        $('<div></div>').attr("class","checkbox").attr("id","chkoptions").appendTo('#hotness').append($("<label></label>").append(value.fields.contactname).attr("type","checkbox").attr('value',value.fields.emailaddress)).append($("<input></inut>").attr("type","checkbox").attr("value",value.fields.emailaddress).attr("checked","true"));
+                       
+
+                       
+                    };
+                     
+                })
+
+
+            },
+        
+            error: function (error) {
+                alert("Error with Ajax, You SUCK");
+            }
+        });
+    };
+
+
+    $("[name='enddate']").focusout(function(){
+        var sd = new Date($('#id_startdate').val());
+        var ed = new Date($('#id_enddate').val());
+        var time = (ed - sd)/1000;
+        $('#id_time_spent_minutes_field').attr("value", time);
+        
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% block entry-form %}
+<form method=POST action="{% url 'crm:new_entry' %}">
+    {% csrf_token %}
+    
+        <h4>for debugging</h4>
+        {{ tid.ticketid }}
+        {{ entries.timestamp }}
+        
+        <h2>Entry details</h2>
+        <h5>Technician</h5>
+        {{ entries.technician }}        
+        <h5>Work Type</h5>
+        {{ entries.worktype }}
+        <h5>Notes</h5>
+        {{ entries.notes }}
+        <h5>Total Time Spent On Ticket</h5>    
+        {{ ticket.time_spent_minutes_field }}
+        <div class='container'>
+        {% include 'crm_temps/form_templates/datepicker_modal.html' with a=entries.startdate %}
+   
+        {% include 'crm_temps/form_templates/datepicker_modal.html' with a=entries.enddate %}
+        </div>
+
+        <button style="background-color:green; margin:5em;" class="btn btn-lg" type='submit'>Submit</button>
+    </div>
+</form>
+<script>
+    $(document).ready(function(){
+        $('select').formSelect();
+    });
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
