@@ -101,17 +101,16 @@ class NewTicketTimeEntries(forms.ModelForm):
 		model = Timeentries
 		fields = ("__all__")
 		widgets = {
-
-			'notes':forms.TextInput(attrs={'placeholder':'Entry Notes'}),
-			'technician': forms.Select(choices=Technicians.objects.values_list('nickname','nickname')),
+					'notes':forms.TextInput(attrs={'placeholder':'Entry Notes'}),
+					'technician': forms.Select(choices=Technicians.objects.values_list('nickname','nickname')),
 
 		}
 
 	timestamp = forms.CharField(widget=forms.DateInput(attrs={
 		"placeholder":"timestamp", "value":movie})) 
 	worktype = forms.CharField(widget=forms.Select(choices=Worktypes.objects.values_list('worktype', 'worktype'))) 
-	startdate = forms.DateTimeField(widget=forms.HiddenInput())
-	enddate = forms.DateTimeField(widget=forms.HiddenInput())
+	startdate = forms.DateTimeField(widget=forms.TextInput(attrs={"class":"datepicker"}))
+	enddate = forms.DateTimeField(widget=forms.TextInput(attrs={"class":"datepicker"}))
 	
 		
 		

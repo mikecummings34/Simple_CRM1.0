@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+	<div class="container">
+		<div class="row" id="title_row">
+			<h1>{{ clientinfo.clientname }}</h1>
+			<form method="GET" action="{% url 'accounts:tickets' %}">				
+				<button class="btn btn-default" type='submit' name="cid" value="{{ clientinfo.oid }}">View Service Tickets</button>
+			</form>
+			
+		</div>
+		<div class="row" id="adress_row">
+			<h3>Address</h3>
+				<h4>
+				{{ clientinfo.address1 }} <br/>
+				{{ clientinfo.address2 }}
+				{{ clientinfo.address3 }}
+				{{ clientinfo.city }},{{ clientinfo.state }} {{ clientinfo.zipcode }}
+				</h4>
+		</div>
+		<div class="row" id="contactinfo_row">
+			<h3>Contact Information</h3>
+				<h4>
+				{{ clientinfo.phonenumber }}, ext{{ clientinfo.extension }}<br/>			
+				Primary Contact: {{ clientinfo.primarycontact }}<br/>
+				Email: {{ clientinfo.email }}<br/>
+				Fax Number: {{ clientinfo.fax_number }}<br/>
+				{% for contact in contact %}
+				{{ contact.contactname }}
+				{% endfor %}
+
+		</div>
+		<div class="row" id="clientinfo">
+			<div class="row">
+				<h3>Notes</h3>
+			</div>				
+				<h4>{{ clientinfo.notes }}<br/>
+			<div class="row">
+				<h3>Client Type</h3>
+			</div>
+				{{ type.type }}<br/>
+			<div class="row">
+				<h3>Do not Assist?</h3>
+			</div>
+			{{ clientinfo.donotassist|yesno:"Do not assist,Assist" }}<br/>
+			</h4>			
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -15,11 +15,14 @@
         {{ entries.notes }}
         <h5>Total Time Spent On Ticket</h5>    
         {{ ticket.time_spent_minutes_field }}
-        <div class='container'>
-        {% include 'crm_temps/form_templates/datepicker_modal.html' with a=entries.startdate %}
+        
+        {{ entries.startdate }}
    
-        {% include 'crm_temps/form_templates/datepicker_modal.html' with a=entries.enddate %}
-        </div>
+        {{ entries.enddate }}
+
+        <button class="datepicker">
+
+        
 
         <button style="background-color:green; margin:5em;" class="btn btn-lg" type='submit'>Submit</button>
     </div>
@@ -27,7 +30,12 @@
 <script>
     $(document).ready(function(){
         $('select').formSelect();
+        $('.datepicker').datepicker({
+            autocClose: true,
+        });
+
     });
+
 </script>
 {% endblock %}
 
