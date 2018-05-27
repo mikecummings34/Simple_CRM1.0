@@ -134,10 +134,54 @@ def client(request):
 				value = {'client': query}
 				return render(request, 'crm_temps/client.html', value)
 
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView, View
 
-class clienttest(ListView): ##pass kwargs
-	model = Clientlist
-	queryset = Clientlist.objects.all()
-	template_name = 'crm_temps/client.html'
-	context_object_name = 'client'
+
+
+class QueryMixin(object):
+	query_string = ''
+	template = ''
+	parameter_name = None
+	object_list_name = ''
+
+	def get(self, request):
+		if request.method == "GET":
+			q = self.query_string
+			lib = {self.object_list_name:q}
+			return render(request, self.template, lib)
+		else:
+			return HttpResponse('Fucked at Get')
+
+	def post(self, request):
+		if request.method == "POST":
+			lib =[]
+			if self.parameter_name in request.POST and request.POST[self.parameter_name]:
+				for self.query_string in self.query_string:
+					q = lib.append(self.query_string)
+				return render(request, self.template, lib)
+
+class clienttest(QueryMixin, View):
+	query_string = Clientlist.objects.all().values()
+	template = 'crm_temps/client.html'
+	object_list_name = 'client'
+
+class clientposttest(QueryMixin, View):
+	query_string = {'clientinfo':Clientlist.objects.get(oid=self.request.POST['q']), 
+	'contact':Contact.objects.filter(clientid=self.request.POST['q'])}
+	template = 'crm_temps/client_profile.html'
+	object_list_name = 'clientinfo'
+	parameter_name = 'q'
+	def getq(self):
+	
+
+	##object_list_name = client{clientinfo{},contact{}} called client.contact.name.info
+
+
+	
+
+	
+
+
+
+
+
