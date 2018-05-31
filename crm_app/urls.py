@@ -22,14 +22,15 @@ from django.urls import reverse
 from accounts import views as accountview
 
 urlpatterns = [
-	url(r'^$', views.view_profile, name = 'view_profile'),
-	url(r'^tickets/details/$', views.ticket_detail, name='ticket_detail'),
+	url(r'^$', views.view_profile.as_view(), name = 'view_profile'),
+	url(r'^tickets/details/$', views.ticket_detail.as_view(), name='ticket_detail'),
 	url(r'^tickets/new-entry/$', views.new_entry, name='new_entry'),
     url(r'^tickets/new/$', views.create_ticket, name='create_ticket'),
     url(r'^tickets/$', views.tickets, name='tickets'),
     url(r'^client/$', views.client, name='client'),
     url(r'^clienttest/$',  views.clienttest.as_view(), name = "clienttest"),
-	
+    url(r'^client_detail/$',  views.client_detail.as_view(), name = "client_detail"),
+    	
 
 
 

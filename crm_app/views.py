@@ -10,10 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.forms import modelform_factory
 from django.http import HttpResponse, JsonResponse
 from django.db.models import F
-
+from django.views.generic import ListView, FormView, View, DetailView
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
+"""
 def view_profile(request):
 	if request.method == 'POST':
 		if 'recent_tickets' in request.POST and request.POST['recent_tickets']:
@@ -24,7 +26,38 @@ def view_profile(request):
 	else:		
 		args = {'user': request.user}
 		return render(request, 'crm_temps/view-profile.html', args)
+"""
+##class based view of view profile
 
+class view_profile(ListView):
+
+	template_name = 'crm_temps/view-profile.html'
+	context_object_name = 'placeholder'
+	http_method_names = ['get','post']
+	
+	def get_context_data(self, **kwargs):
+		context = super(view_profile, self).get_context_data(**kwargs)
+		if self.request.method == "POST":
+			context['user'] =  self.request.user
+			context['tickets'] = Servicetickets.objects.filter(technician = self.request.POST['recent_tickets']).order_by('-ticketstartdate')
+			return context
+		else:
+			context['user'] = self.request.user
+			return context
+
+	def get_queryset(self):
+		if self.queryset is None:
+			return self.queryset
+
+	def post(self, request, *args, **kwargs):
+		if self.request.method == "POST":
+			self.object_list = self.get_queryset()
+			allow_empty = self.get_allow_empty()
+			context = self.get_context_data()
+			return self.render_to_response(context)
+		else:
+			HttpResponse("fuck you")
+'''
 def ticket_detail(request):
 	if request.method == "GET":
 		if 'ticket' in request.GET and request.GET['ticket']:
@@ -33,6 +66,21 @@ def ticket_detail(request):
 			tset = Timeentries.objects.filter(ticketid = q)
 			lib = {'tickets':qset, 'entries':tset}
 			return render(request, 'crm_temps/ticket-details.html', lib)
+'''
+
+class ticket_detail(ListView):
+	template_name = 'crm_temps/ticket-details.html'
+	context_object_name = 'placeholder'
+
+	def get_context_data(self, **kwargs):
+		context = super(ticket_detail, self).get_context_data(**kwargs)
+		context['tickets'] =  Servicetickets.objects.get(oid = self.request.GET['ticket'])
+		context['entries'] = Timeentries.objects.filter(ticketid = self.request.GET['ticket'])
+		return context
+	def get_queryset(self):
+		if self.queryset is None:
+			return self.queryset
+
 
 def new_entry(request):
 	if request.method == "GET":
@@ -103,6 +151,7 @@ def tickets(request):
 			lib = {'tickets': tickets}
 			return render(request, 'crm/tickets.html', lib)
 
+
 def client(request):
 	if request.method == "POST":
 		if 'q' in request.POST and request.POST['q']: 
@@ -134,47 +183,67 @@ def client(request):
 				value = {'client': query}
 				return render(request, 'crm_temps/client.html', value)
 
-from django.views.generic import ListView, FormView, View
 
+###this could work, but need to render different templates for each request type.
 
+class clienttest(ListView):
+	model = Clientlist
+	query_set = Clientlist.objects.all()
+	template_name = 'crm_temps/client.html'
+	context_object_name = 'client'
 
-class QueryMixin(object):
-	query_string = ''
-	template = ''
-	parameter_name = None
-	object_list_name = ''
+	def get_context_data(self, **kwargs):
+		context = super(clientposttest, self).get_context_data(**kwargs)
+		if self.request.method == 'GET':
+			if self.request.GET == 'tech':
+				context['tickets'] = Servicetickets.objects.filter(technician = self.request.GET['tech'])
+				return context
+			else:
+				return context
+		elif self.request.method == "POST":
+			if self.request.POST == 'q':
+				context['clientinfo'] = Clientlist.objects.get(oid = self.request.POST['q'])
+				context['contact'] = Contacts.objects.filter(clientid = self.request.POST['q'])
+				return context
+			elif self.request.POST == 'tickets':
+				context['tickets'] = Servicetickets.objects.filter(clientid = self.request.POST['tickets'])
+				context['name'] = Clientlist.objects.get(oid = self.request.POST['tickets'])
+				return context 
 
-	def get(self, request):
-		if request.method == "GET":
-			q = self.query_string
-			lib = {self.object_list_name:q}
-			return render(request, self.template, lib)
+	def get_queryset(self):
+		if self.queryset is None:
+			return self.queryset
+
+	def post(self, request, *args, **kwargs):
+		if self.request.method == "POST":
+			self.object_list = self.get_queryset()
+			allow_empty = self.get_allow_empty()
+			context = self.get_context_data()
+			return self.render_to_response(context)
 		else:
-			return HttpResponse('Fucked at Get')
+			HttpResponse("fuck you")		
 
-	def post(self, request):
-		if request.method == "POST":
-			lib =[]
-			if self.parameter_name in request.POST and request.POST[self.parameter_name]:
-				for self.query_string in self.query_string:
-					q = lib.append(self.query_string)
-				return render(request, self.template, lib)
 
-class clienttest(QueryMixin, View):
-	query_string = Clientlist.objects.all().values()
-	template = 'crm_temps/client.html'
-	object_list_name = 'client'
 
-class clientposttest(QueryMixin, View):
-	query_string = {'clientinfo':Clientlist.objects.get(oid=self.request.POST['q']), 
-	'contact':Contact.objects.filter(clientid=self.request.POST['q'])}
-	template = 'crm_temps/client_profile.html'
-	object_list_name = 'clientinfo'
-	parameter_name = 'q'
-	def getq(self):
-	
 
-	##object_list_name = client{clientinfo{},contact{}} called client.contact.name.info
+class client_detail(ListView):
+	#query_set = Clientlist.objects.all()
+	template_name = 'crm_temps/client_profile.html'
+	context_object_name = "clientinfo"
+	#extra_context = {'contact':Contacts.objects.all()}
+	#query_set = Clientlist.objects.all()
+	#model = Clientlist
+
+	def get_context_data(self, **kwargs):
+		context = super(clientposttest, self).get_context_data(**kwargs)
+		context['contact'] =  Contacts.objects.filter(clientid = self.request.GET['q'])
+		context['clientinfo'] = Clientlist.objects.get(oid = self.request.GET['q'])
+		return context
+	def get_queryset(self):
+		if self.queryset is None:
+			return self.queryset
+
+
 
 
 	

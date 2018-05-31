@@ -4,7 +4,7 @@
 	<div class="container">
 		<div class="row" id="title_row">
 			<h1>{{ clientinfo.clientname }}</h1>
-			<form method="GET" action="{% url 'accounts:tickets' %}">				
+			<form method="GET" action="{% url 'crm:tickets' %}">				
 				<button class="btn btn-default" type='submit' name="cid" value="{{ clientinfo.oid }}">View Service Tickets</button>
 			</form>
 			
