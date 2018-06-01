@@ -27,10 +27,18 @@ urlpatterns = [
 	url(r'^tickets/new-entry/$', views.new_entry, name='new_entry'),
     url(r'^tickets/new/$', views.create_ticket, name='create_ticket'),
     url(r'^tickets/$', views.tickets, name='tickets'),
-    url(r'^client/$', views.client, name='client'),
-    url(r'^clienttest/$',  views.clienttest.as_view(), name = "clienttest"),
-    url(r'^client_detail/$',  views.client_detail.as_view(), name = "client_detail"),
-    	
+
+
+
+
+    url(r'^client/$', views.ClientGet.as_view(), name='client'),
+    url(r'^clientq/$', views.ClientPostQ.as_view(), name = 'client_detail'),
+    url(r'^client_tech/$', views.ClientGetTech.as_view(), name = 'client_tech'),
+    url(r'^client_tickets/$', views.ClientPostTickets.as_view(), name = 'client_tickets'),
+
+    #url(r'^clienttest/$',  views.clienttest.as_view(), name = "clienttest"),	
+    #url(r'^clientposttest/$',  views.clientposttest.as_view(), name = "clientposttest"),
+    
 
 
 
