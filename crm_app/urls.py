@@ -25,8 +25,9 @@ urlpatterns = [
 	url(r'^$', views.view_profile.as_view(), name = 'view_profile'),
 	url(r'^tickets/details/$', views.ticket_detail.as_view(), name='ticket_detail'),
 	url(r'^tickets/new-entry/$', views.new_entry, name='new_entry'),
-    url(r'^tickets/new/$', views.create_ticket, name='create_ticket'),
+    url(r'^new-ticket/$', views.create_ticket.as_view(), name='create_ticket'),
     url(r'^tickets/$', views.tickets, name='tickets'),
+    url(r'ajax_req/$', views.ajax_req, name='ajax_req'),
 
 
 

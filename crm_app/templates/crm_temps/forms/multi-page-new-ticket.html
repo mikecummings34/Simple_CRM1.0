@@ -1,66 +1,73 @@
 {% block multi-page-new-ticket %}
-<form method=POST action="{% url 'accounts:create_ticket' %}">
+<form method=POST action="{% url 'crm:create_ticket' %}">
     {% csrf_token %}
    
 
-    <fieldset id="first">
-        <h2>Enter new ticket title</h2>
-        {{ ticket.ticket_title }}
+{{ ticket }}
         
-        <div class="container" style="padding:30px";>
-        {% include 'crm_app/form_templates/datepicker_modal.html' with a=ticket.ticketstartdate %}
-        </div>
-        
-        <h2>Tecnhician</h2> 
-        {{ ticket.technician }}
-        
-        <h2>Client name</h2>
-        {{ ticket.clientid }}
-
-        <h2>Send Complete Email To:</h2>
-        <div id="hotness">
-        </div>
-
-        <h2>Contact name</h2>
-        {{ ticket.contact_name }}
-        
-        
-        <h2>Work type</h2>
-        {{ ticket.worktype }}
-        
-        <h2>Ticket status</h2>
-        {{ ticket.ticket_status }}
-        (timestamp **needs to be hidden)
-        {{ ticket.timestamp }}
-        <input class="next_btn" type="button" value="Next">
-    </fieldset>
    
     
-    <fieldset>
-        <h4>for debugging</h4>
-        {{ tid.ticketid }}
-        {{ entries.timestamp }}
-        <h2>Entry details</h2>
-        <h3>Technician</h3>
-        {{ entries.technician }}        
-        <h3>Work Type</h3>
-        {{ entries.worktype }}
-        <h3>Notes</h3>
-        {{ entries.notes }}
-        <h3>Total Time Spent On Ticket</h3>    
-        {{ ticket.time_spent_minutes_field }}
-        <div class='container'>
-        {% include 'accounts/form_templates/datepicker_modal.html' with a=entries.startdate %}
-   
-        {% include 'accounts/form_templates/datepicker_modal.html' with a=entries.enddate %}
-        </div>
-
-        <button style="background-color:green; margin:5em;" class="btn btn-lg" type='submit'>Submit</button>
-
-        <button type='submit'>Submit</button>
-    </fieldset>
-       
+{{ entries }}
+<button class="btn waves-effect waves-light" type="submit" name="action">Submit
+<i class="material-icons right">send</i>
+</button>
 </form>
+<script>
+    $('select').formSelect();
+    $('select').formSelect().attr("class","browser-default");
+
+   
+
+    $('#id_ticketstartdate').datepicker();
+
+    $('#id_clientid').change(function(event){
+        if($("#hotness").children().length) {
+          $("#hotness").empty();
+            ajaxEmail();
+        } else {
+            ajaxEmail();
+        }
+    });
+        function ajaxEmail () {    
+        var urls = $('#ajax_url').attr('href');
+        var  clientid = $('#id_clientid');
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: urls,
+            data: {
+                'clientid' : $('#id_clientid').val(), csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(result) {
+                $.each(result, function(index, value) {
+                    $('#id_contact_name')
+                        .append($("<option></option>")
+                                .attr("value",value.fields.contactname)
+                                .text(value.fields.contactname));
+                });
+        $('#id_contact_name').formSelect();
+
+
+
+
+                $.each(result, function(index, value){
+                    if($('.input'))
+                    if (value.fields.sendticketcompleteemail == true) {
+                        $('#hotness').append($('<p></p>')).append($('<label></label>').attr('for', value.fields.emailaddress)).append($('<input />').attr('type','checkbox')).append($('<span></span>').text(value.fields.contactname))                     
+                    };
+                     
+                })
+
+
+            },
+        
+            error: function (error) {
+                alert("Error with Ajax, You SUCK");
+            }
+        });
+    };
+
+</script>
 {% endblock %}
 
  

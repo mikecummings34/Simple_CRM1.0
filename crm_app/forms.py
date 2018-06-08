@@ -73,27 +73,27 @@ def movie():
 	return m
 
 class NewTicketForm(forms.ModelForm):
+
 	class Meta:
 		model = Servicetickets
 		fields = ("__all__")
 		widgets = {
 			#'ticketstartdate':DateTimePicker(options={"format": "YYYY/MM/DD HH:mm:ss"}, attrs={'onchange':'this.form.submit()'}),
 			'technician': forms.Select(choices=Technicians.objects.values_list('nickname','nickname')),
-			'ticket_title':forms.TextInput(attrs={'placeholder':'title', 'style':'font-size:48px;'}),
-			'contact_name':forms.Select(attrs={'placeholder':'contact'}),
-
+			'ticket_title':forms.TextInput(attrs={'placeholder':'title'}),
+			'contact_name':forms.Select(),
 			
 		}
-	
+	#ticketstartdate = forms.DateField()
 	clientid = forms.IntegerField(widget=forms.Select(choices=Clientlist.objects.values_list('oid','clientname')
 		))
-	
 	#technician = forms.CharField(widget=forms.Select(choices=Technicians.objects.values_list('nickname','nickname')))
 	worktype = forms.CharField(widget=forms.Select(choices=Worktypes.objects.values_list('worktype', 'worktype')))
-	ticketstartdate = forms.DateTimeField(widget=forms.HiddenInput())
+	ticketstartdate = forms.CharField()
 	timestamp = forms.CharField(widget=forms.DateInput(attrs={
 		"placeholder":'timestamp', "value":movie}))
 	ticket_status = forms.CharField(widget=forms.Select(choices=Ticketstatuses.objects.values_list('oid','status')))
+
 
 
 class NewTicketTimeEntries(forms.ModelForm):

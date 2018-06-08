@@ -65,7 +65,7 @@ def new_entry(request):
 			s = entry.save()
 			return HttpResponse('saved')
 
-
+'''
 def create_ticket(request):
 	if request.method == "GET":
 		ticket = NewTicketForm(request.GET)
@@ -93,31 +93,7 @@ def create_ticket(request):
 			send_mail(subject, message, from_email, ['admin@example.com'])
 
 			return HttpResponse(entryintance.ticketid)
-
-def tickets(request):
-	if request.method == "GET":
-
-		if 'cid' in request.GET and request.GET['cid']:
-			q = request.GET['cid']
-			tickets = Servicetickets.objects.filter(clientid=q)
-			lib = {'tickets':tickets}
-			return render(request, 'crm_temps/tickets.html', lib)
-		elif 'tech' in request.GET and request.GET['tech']:
-			q=request.GET['tech']
-			tickets = Servicetickets.objects.filter(technician=q)
-			lib = {'tickets':tickets}
-			return render(request, 'crm_temps/tickets.html', lib)
-		elif 'filter' in request.GET and request.GET['filter']:
-			q = request.GET['filter']
-			tickets = Servicetickets.objects.filter(ticket_status=1)
-			lib={'tickets':tickets}
-			return render(request, 'crm_temps/tickets.html')
-
-		else:	
-			tickets = Servicetickets.objects.all().order_by('-ticketstartdate')[:30]
-			lib = {'tickets': tickets}
-			return render(request, 'crm_temps/tickets.html', lib)
-
+'''
 '''
 def client(request):
 	if request.method == "POST":
@@ -237,10 +213,48 @@ class client_detail(ListView):
 
 
 
+def tickets(request):
+	if request.method == "GET":
+
+		if 'cid' in request.GET and request.GET['cid']:
+			q = request.GET['cid']
+			tickets = Servicetickets.objects.filter(clientid=q)
+			lib = {'tickets':tickets}
+			return render(request, 'crm_temps/tickets.html', lib)
+		elif 'tech' in request.GET and request.GET['tech']:
+			q=request.GET['tech']
+			tickets = Servicetickets.objects.filter(technician=q)
+			lib = {'tickets':tickets}
+			return render(request, 'crm_temps/tickets.html', lib)
+		elif 'filter' in request.GET and request.GET['filter']:
+			q = request.GET['filter']
+			tickets = Servicetickets.objects.filter(ticket_status=1)
+			lib={'tickets':tickets}
+			return render(request, 'crm_temps/tickets.html')
+
+		else:	
+			tickets = Servicetickets.objects.all().order_by('-ticketstartdate')[:30]
+			lib = {'tickets': tickets}
+			return render(request, 'crm_temps/tickets.html', lib)
+
 ## Client Functions in CBV START HERE##
 ######################################
 #####################################
 ####################################
+class create_ticket(FormView):
+	form_class = NewTicketForm
+	success_url = '/'
+	template_name = 'crm_temps/forms/new-ticket.html'
+	initial = {'technician':'choose tech'}
+
+	def get_context_data(self, *args, **kwargs):
+		context = super(create_ticket, self).get_context_data(**kwargs)
+		context['ticket'] = NewTicketForm(self.request.GET)
+		context['entries'] = NewTicketTimeEntries(self.request.GET)
+		return context
+
+
+
 class ClientMixin(object):
 	"""Main mixin for client based functions. Change this before live. failed on get is an option so resubmitting
 	a posted page will redirect to post it again"""
@@ -257,6 +271,12 @@ class ClientMixin(object):
 			return self.render_to_response(context)
 
 ##vvvvvCBVs that Inherit from Client Mixin vvvvvvv###
+
+
+#	def get_context_data(self, **kwargs):
+#		context = super(tickets_cid, self).get_context_data(**kwargs)
+#		context['cid']
+
 class view_profile(ClientMixin, ListView):
 
 	template_name = 'crm_temps/view-profile.html'
@@ -335,7 +355,13 @@ class ClientGet(ListView):
 
 	
 
-
-
-
+from django.core import serializers
+def ajax_req(request):
+	if request.method == "GET":
+		return HttpResponse('')
+	if request.is_ajax():
+		result = request.POST['clientid']
+		q = Contacts.objects.filter(clientid = result)
+		jsrz = serializers.serialize('json',q)
+		return HttpResponse(jsrz, content_type = 'application/json')
 

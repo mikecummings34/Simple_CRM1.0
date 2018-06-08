@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['localhost', '10.1.10.129', 'devcomp', 'matt', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'material',
     'bootstrap3_datetime',
     'crm_app',
     'accounts',
