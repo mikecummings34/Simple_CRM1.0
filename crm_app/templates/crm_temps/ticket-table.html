@@ -17,8 +17,10 @@
 			<div class="ticket_table" id="table">
 				<div class="container" id="tablebody">
 					<table class='striped responsive-table-vertical'>
+						<caption>Active Issues</caption>
 						<thead>
 	          				<tr>
+	          					<th>Technician</th>
 	              				<th>Ticket Title</th>
 	              				<th>Start Date</th>
 	              				<th>Status</th>
@@ -29,7 +31,7 @@
 	     				
 	          			<tr>
 	        				
-	          				<td data-label='Technician'><blockquote>{{ tickets.technician}}</blockquote></td>	          			
+	          				<td data-label='Technician'>{{ tickets.technician}}</td>	          			
 				            <td data-label='Ticket Title'>{{ tickets.ticket_title }}</td>
 				            <td data-label='Start Date'>{{ tickets.ticketstartdate }}</td>
 				            <td data-label='Ticket Status'>{{ tickets.ticket_status }}</td>
