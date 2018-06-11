@@ -69,8 +69,8 @@ from netunix import views
 def movie():
 	t = views.dotnet_unix().now()
 	i = views.dotnet_unix().from_dotnet(t)
-	m = datetime.fromtimestampe(str(i))
-	return m
+	m = datetime.fromtimestamp(i)
+	return i
 
 class NewTicketForm(forms.ModelForm):
 
@@ -90,8 +90,7 @@ class NewTicketForm(forms.ModelForm):
 	#technician = forms.CharField(widget=forms.Select(choices=Technicians.objects.values_list('nickname','nickname')))
 	worktype = forms.CharField(widget=forms.Select(choices=Worktypes.objects.values_list('worktype', 'worktype')))
 	ticketstartdate = forms.CharField()
-	timestamp = forms.CharField(widget=forms.DateInput(attrs={
-		"placeholder":'timestamp', "value":movie}))
+	timestamp = forms.CharField(widget=forms.DateInput(attrs={"placeholder":movie, "value":movie}))
 	ticket_status = forms.CharField(widget=forms.Select(choices=Ticketstatuses.objects.values_list('oid','status')))
 
 

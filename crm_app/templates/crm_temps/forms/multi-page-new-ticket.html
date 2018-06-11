@@ -2,7 +2,8 @@
 <form method=POST action="{% url 'crm:create_ticket' %}">
     {% csrf_token %}
    
-
+<div id="hotness">
+</div>
 {{ ticket }}
         
    
@@ -15,6 +16,7 @@
 <script>
     $('select').formSelect();
     $('select').formSelect().attr("class","browser-default");
+    
 
    
 

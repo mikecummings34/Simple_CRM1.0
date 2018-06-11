@@ -1,23 +1,20 @@
- <nav class="green accent-3"> <!-- navbar content here  --> </nav>
+<nav>
+    <div class="nav-wrapper">
+      <a href="#!" class="brand-logo">Logo</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+    <li><a href="{% url 'crm:create_ticket' %}">Sass</a></li>
+    <li><a href="{% url 'crm:tickets' %}">Components</a></li>
+    <li><a href="{% url 'crm:client' %}">Javascript</a></li>
+    </div>
+  </nav>
 
-  <ul id="slide-out" class="sidenav">
-    <li><div class="user-view">
-      <div class="background">
-        <img src="images/office.jpg">
-      </div>
-      <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
-      <a href="#name"><span class="white-text name">John Doe</span></a>
-      <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
-    </div></li>
-    <li><a  href="{% url 'crm:view_profile' %}"><i class="material-icons">cloud</i>Home</a></li>
-    <li><a  href="{% url 'crm:create_ticket' %}"><i class="material-icons">cloud</i>Create Ticket</a></li>
-    <li><a href="{% url 'crm:tickets' %}">View Tickets</a></li>
-    <li><a href="{% url 'crm:client' %}"> Client List</a></li>
-    <li><div class="divider"></div></li>
-    <li><a class="subheader">Subheader</a></li>
-    <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="{% url 'crm:create_ticket' %}">Sass</a></li>
+    <li><a href="{% url 'crm:tickets' %}">Components</a></li>
+    <li><a href="{% url 'crm:client' %}">Javascript</a></li>
+    <li><a href="mobile.html">Mobile</a></li>
   </ul>
-  <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="large material-icons teal-text text-lighten-2">menu</i></a>
   
 
   <script>

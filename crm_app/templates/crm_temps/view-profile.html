@@ -12,12 +12,14 @@
 {% endblock %}
 
 {% block body %}
-
 {% if tickets %}
-
-{% block tickettable %}
+<div class="current-issues-window">
 {% include 'crm_temps/ticket-table.html' %}
-{% endblock %}
+</div>
+
+<div class="ticket-table">
+{% include 'crm_temps/ticket-table.html'}
+</div>
 
 {% else %}
 <div class='container'>
@@ -35,6 +37,8 @@
 <script>
 	$(document).ready(function(){
 	$("#auto_submit_form").submit();
+
+	
 });
 
 </script>
