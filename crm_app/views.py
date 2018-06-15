@@ -349,6 +349,20 @@ class ClientGet(ListView):
 	queryset = Clientlist.objects.all()
 	context_object_name = 'client'
 
+###below is for testing. If it works, try to keep it more DRY##
+
+class TicketFilter(ClientMixin, ListView):
+	template_name = "crm_temps/view-profile.html"
+	model = "Servicetickets"
+
+	def get_context_data(self, **kwargs):
+		context=super(TicketFilter, self).get_context_data(**kwargs)
+		context['tickets'] = Servicetickets.objects.filter(ticket_status=1)
+		return context
+
+
+
+
 ####^^^^^^^End of ClientMixin CBVs^^^^^^^^^^########
 ##################################################
 #####################################################

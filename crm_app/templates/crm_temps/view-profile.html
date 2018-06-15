@@ -13,13 +13,17 @@
 
 {% block body %}
 {% if tickets %}
+<form class='tabfilter' name="ticketfilter" method="GET" action="{% url 'crm:ticket-filter' %}">
+	<input type='hidden' name='filter'></input>
+</form>
+
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3"><a href="#test1">Current Issues</a></li>
-        <li class="tab col s3"><a class="active" href="#test2">Start New Ticket</a></li>
-        <li class="tab col s3"><a href="#test3">View Orders and Invoices</a></li>
-        <li class="tab col s3"><a href="#test4">Clients and Contacts</a></li>
+        <li id="currentissues" class="tab col s3"><a href="#test1">Current Issues</a></li>
+        <li id="newticket" class="tab col s3"><a class="active" href="#test2">Start New Ticket</a></li>
+        <li id="orders" class="tab col s3"><a href="#test3">View Orders and Invoices</a></li>
+        <li id="contacts" class="tab col s3"><a href="#test4">Clients and Contacts</a></li>
       </ul>
     </div>
     <div id="test1" class="col s12">{% include 'crm_temps/ticket-table.html' %}</div>
@@ -32,6 +36,7 @@
 <div class="ticket-table">
 {% include 'crm_temps/ticket-table.html' %}
 </div>
+<a id="ajax_url" href="{% url 'crm:ajax_req' %}"></a>
 
 {% else %}
 <div class='container'>
@@ -59,7 +64,21 @@
 	$(document).ready(function(){
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
+	$('#currentissues').click(function(){
+		var req = $('#currentissues').attr('id');
+		var ticketfilter = $('.tabfilter');
+		ticketfilter.attr('value', req);
+		if(ticketfilter.attr('value')) {
+			ticketfilter.submit();
+		};
 
+//the above function will work. Change it so that the value attribute is set to the input.  However, this is clunky, you must also change the active tab. 
+///--Other options include: ajax request to simply return serialized data,,,OR you could use pure jQuery to filter options.
+///if you use ajax, I think I have to render the elements since I cant 	
+
+		
+
+	});
 	
 });
 
