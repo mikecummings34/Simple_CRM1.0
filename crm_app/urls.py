@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^new-ticket/$', views.create_ticket.as_view(), name='create_ticket'),
     url(r'^tickets/$', views.tickets, name='tickets'),
     url(r'ajax_req/$', views.ajax_req, name='ajax_req'),
-    url(r'^ticket-filter/$', views.TicketFilter.as_view(), name='ticket-filter'),
+    url(r'^ajax_req/$', views.ajax_req, name='ticket-filter'),
 
 
 

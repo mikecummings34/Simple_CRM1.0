@@ -13,9 +13,7 @@
 
 {% block body %}
 {% if tickets %}
-<form class='tabfilter' name="ticketfilter" method="GET" action="{% url 'crm:ticket-filter' %}">
-	<input type='hidden' name='filter'></input>
-</form>
+<a id="ajaxUrl" href="{% url 'crm:ticket-filter' %}"></a>
 
   <div class="row">
     <div class="col s12">
@@ -26,16 +24,14 @@
         <li id="contacts" class="tab col s3"><a href="#test4">Clients and Contacts</a></li>
       </ul>
     </div>
-    <div id="test1" class="col s12">{% include 'crm_temps/ticket-table.html' %}</div>
-    <div id="test2" class="col s12">{% include 'crm_temps/ticket-table.html' %}</div>
+    <div id="test1" class="col s12">{% include 'crm_temps/tix.html' %}</div>
+    <div id="test2" class="col s12">{% include 'crm_temps/tix.html' %}</div>
     <div id="test3" class="col s12">Test 3</div>
     <div id="test4" class="col s12">Test 4</div>
   </div>
 
 
-<div class="ticket-table">
-{% include 'crm_temps/ticket-table.html' %}
-</div>
+
 <a id="ajax_url" href="{% url 'crm:ajax_req' %}"></a>
 
 {% else %}
@@ -64,13 +60,29 @@
 	$(document).ready(function(){
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
+
 	$('#currentissues').click(function(){
-		var req = $('#currentissues').attr('id');
-		var ticketfilter = $('.tabfilter');
-		ticketfilter.attr('value', req);
-		if(ticketfilter.attr('value')) {
-			ticketfilter.submit();
-		};
+		var urls = $("#ajaxUrl").attr('href');
+		var filter = $(this).attr('id');
+		$.ajax({
+			type: "GET",
+			dateType: "json",
+			url: urls,
+			data: {
+				'ticketfilter' : $('#currentissues').attr('id')
+			},
+			success:function(result){
+				$.each(result, function(index, value){
+					$('tbody').append($("<tr></tr>").append('<td></td>').text(value.fields.ticket_title));
+				});
+			},
+			error: function() {
+				alert('error');
+			}
+		});
+	});
+	});
+
 
 //the above function will work. Change it so that the value attribute is set to the input.  However, this is clunky, you must also change the active tab. 
 ///--Other options include: ajax request to simply return serialized data,,,OR you could use pure jQuery to filter options.
@@ -78,9 +90,7 @@
 
 		
 
-	});
 	
-});
 
 </script>
 {% endblock %}

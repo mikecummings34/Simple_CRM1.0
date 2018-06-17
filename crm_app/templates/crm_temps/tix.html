@@ -1,0 +1,40 @@
+
+	<form id='ff' method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
+
+
+					<table class='striped responsive-table-vertical'>
+						<caption>Active Issues</caption>
+						<thead>
+	          				<tr>
+	          					<th>Technician</th>
+	              				<th>Ticket Title</th>
+	              				<th>Start Date</th>
+	              				<th>Status</th>
+	          				</tr>
+	    				</thead>
+	     				<tbody>
+	     				
+	     				
+	          			<tr>
+	        				
+	          				<td data-label='Technician'></td>	          			
+				            <td data-label='Ticket Title'></td>
+				            <td data-label='Start Date'></td>
+				            <td data-label='Ticket Status'></td>
+				            <td><button value="{{ tickets.oid }}" name="ticket" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">check</i></button></td>
+				           
+	          			</tr>
+
+	          			
+	        			</tbody>
+					</table>
+				</form>
+
+
+<script>
+	$(document).ready(function(){
+    $('.fixed-action-btn').floatingActionButton();
+    $('.dropdown-trigger').dropdown();
+  });
+</script>
+
