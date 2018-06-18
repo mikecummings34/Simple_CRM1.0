@@ -56,12 +56,12 @@
 	float: right;
 }
 </style>
-<script>
+<script type="text/javascript">
 	$(document).ready(function(){
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
 
-	$('#currentissues').click(function(){
+	$('.tabs > li').click(function(){
 		var urls = $("#ajaxUrl").attr('href');
 		var filter = $(this).attr('id');
 		$.ajax({
@@ -69,11 +69,19 @@
 			dateType: "json",
 			url: urls,
 			data: {
-				'ticketfilter' : $('#currentissues').attr('id')
+				'ticketfilter' : filter
 			},
 			success:function(result){
+				var dataRows = $('tbody tr');
 				$.each(result, function(index, value){
-					$('tbody').append($("<tr></tr>").append('<td></td>').text(value.fields.ticket_title));
+					$('tbody').append($(
+						"<tr><td data-label='Technician'>" +value.fields.technician+ "</td><td data-label='Ticket Title'>" +value.fields.ticket_title+ "</td><td data-label='Start Date'>"+value.fields.ticketstartdate+"</td><td data-label='Ticket Status'>"+value.fields.ticket_status+"</td><td><button value='"+value.pk+"' name='ticket' class='btn-floating btn-large waves-effect waves-light red'><i class='material-icons'>check</i></button></td></tr>"
+						));				
+										
+							
+
+					
+
 				});
 			},
 			error: function() {
@@ -84,15 +92,15 @@
 	});
 
 
-//the above function will work. Change it so that the value attribute is set to the input.  However, this is clunky, you must also change the active tab. 
-///--Other options include: ajax request to simply return serialized data,,,OR you could use pure jQuery to filter options.
-///if you use ajax, I think I have to render the elements since I cant 	
+///Try adding a function that executes the ajax call on the tix template. Then when the tab is clicked it will call the function??
+//The easiest method may be to simply have types of ticket lists. 1- current tickets(everything in last 3 months) 2- 
 
 		
 
 	
 
 </script>
+
 {% endblock %}
 
 
