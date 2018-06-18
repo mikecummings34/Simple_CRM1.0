@@ -1,8 +1,6 @@
-{% extends 'base.html' %}
-{% block body %}
 <form method = "POST" action="{% url 'crm:client_detail' %}">
-{% csrf_token %}
-<div class="container">
+	{% csrf_token %}
+	<div class="container">
 	
 		<div class="col-lg-4">
 {% for client in client %}
@@ -19,4 +17,3 @@
       
  });
 </script>
-{% endblock %}

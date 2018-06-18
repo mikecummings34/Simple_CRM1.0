@@ -373,10 +373,17 @@ from django.core import serializers
 def ajax_req(request):
 	if request.is_ajax():
 		if request.method == "GET":
-			result = request.GET['ticketfilter']
-			q = Servicetickets.objects.filter(ticket_status=1)
-			jsrz = serializers.serialize('json',q)
-			return HttpResponse(jsrz, content_type='application/json')
+			if 'ticketfilter' in request.GET:
+				result = request.GET['ticketfilter']
+				q = Servicetickets.objects.filter(ticket_status=1)
+				jsrz = serializers.serialize('json',q)
+				return HttpResponse(jsrz, content_type='application/json')
+			if 'newticket' in request.GET:
+				ticket = NewTicketForm(request.GET)
+				entries = NewTicketTimeEntries(request.GET)
+				lib = {'ticket':ticket, 'entries':entries}
+				data = render(request, 'crm_temps/forms/new-ticket.html',lib)
+				return HttpResponse(data)
 		if request.method == "POST":
 			result = request.POST['clientid']
 			q = Contacts.objects.filter(clientid = result)

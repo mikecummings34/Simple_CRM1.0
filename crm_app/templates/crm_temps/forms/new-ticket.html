@@ -1,17 +1,11 @@
-{% extends 'base.html' %}
-{% block title %}
-<h3>New Ticket</h3>
-{% endblock %}
-{% block body %}
-{% block multi-page-new-ticket %}
+
 {% include 'crm_temps/forms/multi-page-new-ticket.html' %}
-{% endblock %}
+
 
 <a id="ajax_url" href="{% url 'crm:ajax_req' %}"></a>
 
-{% endblock %}
 
-{% block script %}
+
 <script>
   
 
@@ -28,4 +22,3 @@
     $('datepicker').datepicker();
   });
 </script>
-{% endblock %}

@@ -18,8 +18,8 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li id="currentissues" class="tab col s3"><a href="#test1">Current Issues</a></li>
-        <li id="newticket" class="tab col s3"><a class="active" href="#test2">Start New Ticket</a></li>
+        <li id="currentissues" class="tab col s3"><a class="active" href="#test1">Current Issues</a></li>
+        <li id="newticket" class="tab col s3"><a id="newtix" href="#test2">Start New Ticket</a></li>
         <li id="orders" class="tab col s3"><a href="#test3">View Orders and Invoices</a></li>
         <li id="contacts" class="tab col s3"><a href="#test4">Clients and Contacts</a></li>
       </ul>
@@ -33,6 +33,8 @@
 
 
 <a id="ajax_url" href="{% url 'crm:ajax_req' %}"></a>
+<a id="clients_url" href="{% url 'crm:client' %}"></a>
+<a id="form_url" href="{% url 'crm:create_ticket' %}"></a>
 
 {% else %}
 <div class='container'>
@@ -58,10 +60,20 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
+	$('#newtix').click(function(){
+		$.get($('#form_url').attr('href'), function(data){
+			$('#test2').html(data);
+		});
+	});
+	$('#contacts').click(function(){
+		$.get($('#clients_url').attr('href'), function(data){
+			$('#test4').html(data);
+		});
+	})
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
 
-	$('.tabs > li').click(function(){
+	$('#currentissues').click(function(){
 		var urls = $("#ajaxUrl").attr('href');
 		var filter = $(this).attr('id');
 		$.ajax({
