@@ -1,5 +1,8 @@
 
+
+  <!--Base template for ticket table. Uses Ajax and Jquery to render -->	
 	<form id='ff' method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
+
 
 
 					<table class='striped responsive-table-vertical'>
@@ -21,7 +24,7 @@
 <script>
 	$(document).ready(function(){
     $('.fixed-action-btn').floatingActionButton();
-    $('.dropdown-trigger').dropdown();
+    
   });
 </script>
 
