@@ -13,7 +13,7 @@
 
 {% block body %}
 {% if tickets %}
-<a id="ajaxUrl" href="{% url 'crm:ticket-filter' %}"></a>
+
 
   <div class="row">
     <div class="col s12">
@@ -24,14 +24,14 @@
         <li id="contacts" class="tab col s3"><a href="#test4">Clients and Contacts</a></li>
       </ul>
     </div>
-    <div id="test1" class="col s12">{% include 'crm_temps/forms/dropdown-filter.html' %} {% include 'crm_temps/tix.html' %}</div>
-    <div id="test2" class="col s12">{% include 'crm_temps/tix.html' %}</div>
+    <div id="test1" class="col s12"></div>
+    <div id="test2" class="col s12"></div>
     <div id="test3" class="col s12">Test 3</div>
     <div id="test4" class="col s12">Test 4</div>
   </div>
 
 
-
+<a id="ajaxUrl" href="{% url 'crm:ticket-filter' %}"></a>
 <a id="ajax_url" href="{% url 'crm:ajax_req' %}"></a>
 <a id="clients_url" href="{% url 'crm:client' %}"></a>
 <a id="form_url" href="{% url 'crm:create_ticket' %}"></a>
@@ -60,47 +60,29 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
-	$('#newtix').click(function(){
-		$.get($('#form_url').attr('href'), function(data){
-			$('#test2').html(data);
+		$('#newtix').click(function(){
+			$.get($('#form_url').attr('href'), function(data){
+				$('#test2').html(data);
 		});
 	});
-	$('#contacts').click(function(){
-		$.get($('#clients_url').attr('href'), function(data){
-			$('#test4').html(data);
+
+		$('#contacts').click(function(){
+			$.get($('#clients_url').attr('href'), function(data){
+				$('#test4').html(data);
+			});
 		});
-	})
+///maybe add the filter is a form and include it in the templates
+
+		$('#currentissues').click(function(){
+			var dataa = {'ticketfilter': 'currentissues'}
+			$.get($('#ajax_url').attr('href'), dataa, function(data){
+				
+				$('#test1').html(data)
+			})
+		})
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
 
-	$('#currentissues').click(function(){
-		var urls = $("#ajaxUrl").attr('href');
-		var filter = $(this).attr('id');
-		$.ajax({
-			type: "GET",
-			dateType: "json",
-			url: urls,
-			data: {
-				'ticketfilter' : filter
-			},
-			success:function(result){
-				var dataRows = $('tbody tr');
-				$.each(result, function(index, value){
-					$('tbody').append($(
-						"<tr><td data-label='Technician'>" +value.fields.technician+ "</td><td data-label='Ticket Title'>" +value.fields.ticket_title+ "</td><td data-label='Start Date'>"+value.fields.ticketstartdate+"</td><td data-label='Ticket Status'>"+value.fields.ticket_status+"</td><td><button value='"+value.pk+"' name='ticket' class='btn-floating btn-large waves-effect waves-light red'><i class='material-icons'>check</i></button></td></tr>"
-						));				
-										
-							
-
-					
-
-				});
-			},
-			error: function() {
-				alert('error');
-			}
-		});
-	});
 	});
 
 

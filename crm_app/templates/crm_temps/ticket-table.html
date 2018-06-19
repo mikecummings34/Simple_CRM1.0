@@ -1,16 +1,6 @@
-{% block tickettable %}	
-	<form id='ff' method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
-		  <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'>Drop Me!<i class="Large material-icons">arrow_drop_down</i></a>
 
-  <!-- Dropdown Structure -->
-  <ul id='dropdown1' class='dropdown-content'>
-    <li><a href="#!">one</a></li>
-    <li><a href="#!">two</a></li>
-    <li class="divider" tabindex="-1"></li>
-    <li><a href="#!">three</a></li>
-    <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
-    <li><a href="#!"><i class="material-icons">cloud</i>five</a></li>
-  </ul>		
+	<form id='ff' method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
+		
 					<table class='striped responsive-table-vertical'>
 						<caption>Active Issues</caption>
 						<thead>
@@ -46,4 +36,4 @@
     $('.dropdown-trigger').dropdown();
   });
 </script>
-{% endblock %}
+

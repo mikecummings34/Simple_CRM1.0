@@ -375,9 +375,14 @@ def ajax_req(request):
 		if request.method == "GET":
 			if 'ticketfilter' in request.GET:
 				result = request.GET['ticketfilter']
-				q = Servicetickets.objects.filter(ticket_status=1)
-				jsrz = serializers.serialize('json',q)
-				return HttpResponse(jsrz, content_type='application/json')
+				q = Servicetickets.objects.filter(technician='Ross')
+				#tech_select = Technicians.objects.all()
+				#status_select = Ticketstatuses.objects.all()
+				lib={'tickets':q}
+				data=render(request, 'crm_temps/ticket-table.html', lib)
+				return HttpResponse(data)
+				#jsrz = serializers.serialize('json',q)
+				#return HttpResponse(jsrz, content_type='application/json')
 			if 'newticket' in request.GET:
 				ticket = NewTicketForm(request.GET)
 				entries = NewTicketTimeEntries(request.GET)
