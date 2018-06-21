@@ -1,14 +1,11 @@
-  <form action="#">
     {% for technician in technician %}
-    <p>Filter By Technician</p>
     <p>
       <label>
-        <input type="checkbox" />
-        <span>Red</span>
+        <input name='technician' value="{{ technician.nickname }}" type="checkbox" />
+        <span>{{ technician.nickname</span>
       </label>
     </p>
     {% endfor %}
-  </form>
 
 
 

@@ -24,12 +24,11 @@
         <li id="contacts" class="tab col s3"><a href="#test4">Clients and Contacts</a></li>
       </ul>
     </div>
-    <div id="test1" class="col s12"></div>
+    <div id="test1" class="col s12">{% include 'crm_temps/ticket-table.html' %}</div>
     <div id="test2" class="col s12"></div>
     <div id="test3" class="col s12">Test 3</div>
     <div id="test4" class="col s12">Test 4</div>
   </div>
-
 
 <a id="ajaxUrl" href="{% url 'crm:ticket-filter' %}"></a>
 <a id="ajax_url" href="{% url 'crm:ajax_req' %}"></a>
@@ -74,14 +73,17 @@
 ///maybe add the filter is a form and include it in the templates
 
 		$('#currentissues').click(function(){
-			var dataa = {'ticketfilter': 'currentissues'}
-			$.get($('#ajax_url').attr('href'), dataa, function(data){
-				
+
+			$.get($('#ajax_url').attr('href'), function(data){				
 				$('#test1').html(data)
 			})
 		})
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
+	    $('.fixed-action-btn').floatingActionButton();
+    $('.collapsible').collapsible();
+    $('.datepicker').datepicker();
+    $('select').formSelect();
 
 	});
 

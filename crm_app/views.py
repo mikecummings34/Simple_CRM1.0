@@ -287,6 +287,10 @@ class view_profile(ClientMixin, ListView):
 		context = super(view_profile, self).get_context_data(**kwargs)
 		if self.request.method == "POST":
 			context['user'] =  self.request.user
+			context['status'] = Ticketstatuses.objects.all()
+			context['technicians'] = Technicians.objects.all()
+			context['client'] = Clientlist.objects.all()
+			context['contacts'] = Contacts.objects.all()
 			context['tickets'] = Servicetickets.objects.filter(technician = self.request.POST['recent_tickets']).order_by('-ticketstartdate')
 			return context
 		else:
@@ -375,7 +379,7 @@ def ajax_req(request):
 		if request.method == "GET":
 			if 'ticketfilter' in request.GET:
 				result = request.GET['ticketfilter']
-				q = Servicetickets.objects.filter(technician='Ross')
+				q = Servicetickets.objects.filter(technician=result)
 				tech_select = Technicians.objects.all()
 				status_select = Ticketstatuses.objects.all()
 				client_select =  Clientlist.objects.all()
@@ -390,6 +394,15 @@ def ajax_req(request):
 				entries = NewTicketTimeEntries(request.GET)
 				lib = {'ticket':ticket, 'entries':entries}
 				data = render(request, 'crm_temps/forms/new-ticket.html',lib)
+				return HttpResponse(data)
+			else:
+				q = Servicetickets.objects.filter(technician=request.user)
+				tech_select = Technicians.objects.all()
+				status_select = Ticketstatuses.objects.all()
+				client_select =  Clientlist.objects.all()
+				contact_select = Contacts.objects.all();
+				lib={'tickets':q, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
+				data=render(request, 'crm_temps/ticket-table.html', lib)
 				return HttpResponse(data)
 		if request.method == "POST":
 			result = request.POST['clientid']
