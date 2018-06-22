@@ -1,11 +1,22 @@
-    {% for technician in technician %}
-    <p>
-      <label>
-        <input name='technician' value="{{ technician.nickname }}" type="checkbox" />
-        <span>{{ technician.nickname</span>
+  <form method="GET" action="{% url 'crm:ticket-filter' %}">
+  <p>
+    {% for technicians in technicians %}
+      <label for="{{ technicians.nickname }}">
+        <input name='tech_filter' type="checkbox" id="{{ technicians.nickname }}" value="{{ technicians.nickname }}" />
+        <span>{{ technicians.nickname }}</span>
       </label>
+     {% endfor %}
     </p>
-    {% endfor %}
+      <div class="input-field col s12">
+    <select multiple name="client_filter">
+      {% for client in client %}
+      <option value="{{ client.oid }}">{{ client.clientname }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Materialize Multiple Select</label>
+  </div>
+</form>
 
 
 

@@ -361,7 +361,13 @@ class TicketFilter(ClientMixin, ListView):
 
 	def get_context_data(self, **kwargs):
 		context=super(TicketFilter, self).get_context_data(**kwargs)
-		context['tickets'] = Servicetickets.objects.filter(ticket_status=1)
+		context['user'] =  self.request.user
+		context['status'] = Ticketstatuses.objects.all()
+		context['technicians'] = Technicians.objects.all()
+		context['client'] = Clientlist.objects.all()
+		context['contacts'] = Contacts.objects.all()
+		#for filters in request.GET:
+		context['tickets'] = Servicetickets.objects.filter(technician=self.request.GET['tech_filter'])
 		return context
 
 

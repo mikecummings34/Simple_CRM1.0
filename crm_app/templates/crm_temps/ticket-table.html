@@ -1,15 +1,9 @@
-  <p>
-  	{% for technicians in technicians %}
-      <label for="{{ technicians.nickname }}">
-        <input type="checkbox" id="{{ technicians.nickname }}" value="{{ technicians.nickname }}" />
-        <span>{{ technicians.nickname }}</span>
-      </label>
-     {% endfor %}
-    </p>
+{% include 'crm_temps/forms/dropdown-filter.html' %}
 
 
 
     </li>
+    
 	<form id='ff' method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
 		
 					<table class='striped responsive-table-vertical'>

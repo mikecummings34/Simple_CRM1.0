@@ -73,14 +73,15 @@
 ///maybe add the filter is a form and include it in the templates
 
 		$('#currentissues').click(function(){
-
 			$.get($('#ajax_url').attr('href'), function(data){				
 				$('#test1').html(data)
 			})
-		})
+		});
+
+	
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
-	    $('.fixed-action-btn').floatingActionButton();
+	$('.fixed-action-btn').floatingActionButton();
     $('.collapsible').collapsible();
     $('.datepicker').datepicker();
     $('select').formSelect();
