@@ -389,7 +389,7 @@ def ajax_req(request):
 				tech_select = Technicians.objects.all()
 				status_select = Ticketstatuses.objects.all()
 				client_select =  Clientlist.objects.all()
-				contact_select = Contacts.objects.all();
+				contact_select = Contacts.objects.all()
 				lib={'tickets':q, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
 				data=render(request, 'crm_temps/ticket-table.html', lib)
 				return HttpResponse(data)
