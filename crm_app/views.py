@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms import modelform_factory
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.db.models import F
+from django.db.models import F, Q
 from django.views.generic import ListView, FormView, View, DetailView
 from django.shortcuts import get_object_or_404
 
@@ -355,9 +355,18 @@ class ClientGet(ListView):
 
 ###below is for testing. If it works, try to keep it more DRY##
 
-class TicketFilter(ClientMixin, ListView):
-	template_name = "crm_temps/view-profile.html"
-	model = "Servicetickets"
+def TicketFiltesdsar(request):
+	if request.method == "GET":
+		g=request.GET		
+		if 'status_filter' in request.GET:
+			a = Q(ticket_status=g['status_filter'])
+		if g['tech_filter']:
+			b = Q(technician=g['tech_filter'])
+		if 'client_filter' in request.GET:
+			c = Q(clientid=g['client_filter'])
+		final_query = Servicetickets.objects.filter(b)
+		lib={'tickets':final_query}
+		return render(request, 'crm_temps/ticket-table.html', lib)
 
 	def get_context_data(self, **kwargs):
 		context=super(TicketFilter, self).get_context_data(**kwargs)
@@ -377,42 +386,64 @@ class TicketFilter(ClientMixin, ListView):
 ##################################################
 #####################################################
 
-	
+
+
+###when clicking ticket table, it send ajax request to here, which includes dropdown filter--in other words, dropdown is being populated w/ variables obtained from here
+###eventhough it looks to be GETting from TickerFilter above.
 
 from django.core import serializers
 def ajax_req(request):
 	if request.is_ajax():
 		if request.method == "GET":
-			if 'ticketfilter' in request.GET:
-				result = request.GET['ticketfilter']
-				q = Servicetickets.objects.filter(technician=result)
-				tech_select = Technicians.objects.all()
-				status_select = Ticketstatuses.objects.all()
-				client_select =  Clientlist.objects.all()
-				contact_select = Contacts.objects.all()
-				lib={'tickets':q, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
-				data=render(request, 'crm_temps/ticket-table.html', lib)
-				return HttpResponse(data)
-				#jsrz = serializers.serialize('json',q)
-				#return HttpResponse(jsrz, content_type='application/json')
-			if 'newticket' in request.GET:
-				ticket = NewTicketForm(request.GET)
-				entries = NewTicketTimeEntries(request.GET)
-				lib = {'ticket':ticket, 'entries':entries}
-				data = render(request, 'crm_temps/forms/new-ticket.html',lib)
-				return HttpResponse(data)
-			else:
-				q = Servicetickets.objects.filter(technician=request.user)
-				tech_select = Technicians.objects.all()
-				status_select = Ticketstatuses.objects.all()
-				client_select =  Clientlist.objects.all()
-				contact_select = Contacts.objects.all();
-				lib={'tickets':q, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
-				data=render(request, 'crm_temps/ticket-table.html', lib)
-				return HttpResponse(data)
+			q = Servicetickets.objects.filter(technician=request.user)
+			tech_select = Technicians.objects.all()
+			status_select = Ticketstatuses.objects.all()
+			client_select =  Clientlist.objects.all()
+			contact_select = Contacts.objects.all();
+			lib={'tickets':q, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
+			data=render(request, 'crm_temps/ticket-table.html', lib)
+			return HttpResponse(data)
 		if request.method == "POST":
 			result = request.POST['clientid']
 			q = Contacts.objects.filter(clientid = result)
 			jsrz = serializers.serialize('json',q)
 			return HttpResponse(jsrz, content_type = 'application/json')
+
+def ajax_form(request):
+	if request.is_ajax():
+		if request.method == 'GET':
+			tform = NewTicketForm(request.GET)
+			eform = NewTicketTimeEntries(request.GET)
+			lib = {'ticket':tform, 'entries':eform}
+			data = render(request, 'crm_temps/forms/new-ticket.html',lib)
+			return HttpResponse(data)
+
+def TicketFilter(request):
+	if request.is_ajax():
+		g=request.GET
+		q = Servicetickets.objects.filter(technician=request.user)
+		tech_select = Technicians.objects.all()
+		status_select = Ticketstatuses.objects.all()
+		client_select =  Clientlist.objects.all()
+		contact_select = Contacts.objects.all();
+		if request.method == "GET":	
+			cc = {}
+			if 'status_filter' in request.GET:
+				cc['a'] = Q(ticket_status=g['status_filter'])
+			if 'tech_filter' in request.GET:
+				cc['b'] = Q(technician=g['tech_filter'])
+			if 'client_filter' in request.GET:
+				cc['c']Q(clientid=g['client_filter'])
+			init_q = Servicetickets.objects.all()
+			for cc in cc:
+				
+			final_query = Servicetickets.objects.filter(a).filter(b).filter(c)
+			lib={'tickets':final_query, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
+			return HttpResponse(render(request, 'crm_temps/ticket-table.html', lib))
+##this all works, but clean it up. Either a class or combine the requests that will use the filter queries.
+
+
+
+
+
 

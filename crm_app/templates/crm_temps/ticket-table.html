@@ -1,5 +1,8 @@
 {% include 'crm_temps/forms/dropdown-filter.html' %}
 
+
+
+    </li>
     
 	<form id='ff' method="GET" action="{% url 'crm:ticket_detail' %}" id="profile_tickets">
 		
@@ -38,6 +41,14 @@
     $('.collapsible').collapsible();
     $('.datepicker').datepicker();
     $('select').formSelect();
+
+		$('#tickettab').click(function(){
+			var datastring = $('#filter_form').serialize();
+			$.get($('#filter_form').attr('action'), datastring, function(data){
+				$('#test1').html(data);
+			 
+		})
+			})
   });
 </script>
 

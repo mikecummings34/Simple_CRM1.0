@@ -2,11 +2,11 @@
     <li>
         <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
         <div class="collapsible-body">
-            <form method="GET" action="{% url 'crm:ticket-filter' %}">
+            <form id='filter_form' method="GET" action="{% url 'crm:ticket-filter' %}">
                 <div class="input-field col s12">
                     <select multiple name="tech_filter">
-                        {% for technicians in technicians %}
-                        <option value="{{ technicians.nickname }}">{{ technicians.nickname }}</option>
+                        {% for technician in technician %}
+                        <option value="{{ technician.nickname }}">{{ technician.nickname }}</option>
                         {% endfor %}
                     </select>
                     <label>Materialize Multiple Select</label>
@@ -29,15 +29,15 @@
 
                     <label>Materialize Multiple Select</label>
                 </div>
-                <input name="startdate_filter" type="text" class="datepicker">
-                <input name="enddate_filter" type="text" class="datepicker">
-                <button>Filter</button>
+
+             
+      
             </form>
         </div>
         </div>
     </li>
 </ul>
-
+<button id="tickettab">Filter</button>
 
 
 <script type="text/javascript">

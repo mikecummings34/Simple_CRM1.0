@@ -24,7 +24,7 @@
         <li id="contacts" class="tab col s3"><a href="#test4">Clients and Contacts</a></li>
       </ul>
     </div>
-    <div id="test1" class="col s12">{% include 'crm_temps/ticket-table.html' %}</div>
+    <div id="test1" class="col s12"></div>
     <div id="test2" class="col s12"></div>
     <div id="test3" class="col s12">Test 3</div>
     <div id="test4" class="col s12">Test 4</div>
@@ -34,6 +34,7 @@
 <a id="ajax_url" href="{% url 'crm:ajax_req' %}"></a>
 <a id="clients_url" href="{% url 'crm:client' %}"></a>
 <a id="form_url" href="{% url 'crm:create_ticket' %}"></a>
+
 
 {% else %}
 <div class='container'>
@@ -59,8 +60,9 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#newtix').click(function(){
+		$('#newticket').click(function(){
 			$.get($('#form_url').attr('href'), function(data){
+				$('#test1').empty();
 				$('#test2').html(data);
 		});
 	});
@@ -77,12 +79,12 @@
 				$('#test1').html(data)
 			})
 		});
+		$('.collapsible').collapsible();
 
 	
 	$("#auto_submit_form").submit();
 	$('.tabs').tabs();
 	$('.fixed-action-btn').floatingActionButton();
-    $('.collapsible').collapsible();
     $('.datepicker').datepicker();
     $('select').formSelect();
 
