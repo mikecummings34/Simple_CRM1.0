@@ -11,6 +11,7 @@
 						<thead>
 	          				<tr>
 	          					<th>Technician</th>
+	          					<th>Client</th>
 	              				<th>Ticket Title</th>
 	              				<th>Start Date</th>
 	              				<th>Status</th>
@@ -21,7 +22,8 @@
 	     				
 	          			<tr>
 	        				
-	          				<td data-label='Technician'>{{ tickets.technician}}</td>	          			
+	          				<td data-label='Technician'>{{ tickets.technician}}</td>	
+	          				<td data-label='Client'><{{ tickets.clientid }}</td>          			
 				            <td data-label='Ticket Title'>{{ tickets.ticket_title }}</td>
 				            <td data-label='Start Date'>{{ tickets.ticketstartdate }}</td>
 				            <td data-label='Ticket Status'>{{ tickets.ticket_status }}</td>

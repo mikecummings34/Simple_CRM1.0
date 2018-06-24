@@ -417,7 +417,7 @@ def ajax_form(request):
 			lib = {'ticket':tform, 'entries':eform}
 			data = render(request, 'crm_temps/forms/new-ticket.html',lib)
 			return HttpResponse(data)
-
+import functools
 def TicketFilter(request):
 	if request.is_ajax():
 		g=request.GET
@@ -425,22 +425,48 @@ def TicketFilter(request):
 		tech_select = Technicians.objects.all()
 		status_select = Ticketstatuses.objects.all()
 		client_select =  Clientlist.objects.all()
-		contact_select = Contacts.objects.all();
+		contact_select = Contacts.objects.all()
+
+
 		if request.method == "GET":	
-			cc = {}
-			if 'status_filter' in request.GET:
-				cc['a'] = Q(ticket_status=g['status_filter'])
-			if 'tech_filter' in request.GET:
-				cc['b'] = Q(technician=g['tech_filter'])
-			if 'client_filter' in request.GET:
-				cc['c']Q(clientid=g['client_filter'])
-			init_q = Servicetickets.objects.all()
-			for cc in cc:
-				
-			final_query = Servicetickets.objects.filter(a).filter(b).filter(c)
-			lib={'tickets':final_query, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
-			return HttpResponse(render(request, 'crm_temps/ticket-table.html', lib))
+			qs = Servicetickets.objects.all()
+			a = None
+			b = None
+			c = None
+			if 'tech_filter' or 'status_filter' or 'client_filter' in request.GET:
+				if request.GET:
+					if 'tech_filter' in request.GET:
+						a = Q(technician=request.GET['tech_filter'])
+					if 'status_filter' in request.GET:
+						b = Q(ticket_status=request.GET['status_filter'])
+					if 'client_filter' in request.GET:
+						c = Q(clientid=request.GET['client_filter'])
+				if a or b or c:
+					if a is not None:
+						qs = qs.filter(a)
+					else:
+						pass
+					if b is not None:
+						qs=qs.filter(b)
+					else:
+						pass
+					if c is not None:
+						qs=qs.filter(c)
+					else:
+						pass	
+
+					lib={'tickets':qs, 'technician':tech_select, 'status':status_select, 'client':client_select, 'contacts':contact_select}
+					data = render(request, 'crm_temps/ticket-table.html', lib)
+					return HttpResponse(data)
+
+
+		
+
+									
+			#final_query = Servicetickets.objects.filter(cc)
+			
 ##this all works, but clean it up. Either a class or combine the requests that will use the filter queries.
+
 
 
 
