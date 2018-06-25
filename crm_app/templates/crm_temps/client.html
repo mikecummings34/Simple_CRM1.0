@@ -1,19 +1,42 @@
-<form method = "POST" action="{% url 'crm:client_detail' %}">
+
+<form id='clientdetails_form' method = "POST" action="{% url 'crm:client_detail' %}">
 	{% csrf_token %}
-	<div class="container">
-	
-		<div class="col-lg-4">
-{% for client in client %}
-<button class='btn btn-default btn-block' type="submit" name="q" value="{{ client.oid }}">{{ client.clientname }}</button>
-{% endfor %}
+	  <ul class="collapsible">
+	  	{% for client in client %}
+    <li>
+      <div class="collapsible-header" name='q' value="{{ client.oid }}"><i class="material-icons">swap_verticle_circle</i>{{ client.clientname }}</div>
+      <div class="collapsible-body"></div>
+    </li>
+    {% endfor %}
+    <input id='reqinput' type='hidden' name='' value=''>
+  </ul>
 
 </div>
 </div> 
 </div>
 </form>
+<style type="text/css">
+	.client-collapse-header {
+		font-size: 2.3rem;
+	}
+</style>
 <script>
+	  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+    $('.collapsible-header').click(function(){
+    	reqName = $(this).attr('name');
+    	reqValue = $(this).attr('value');
+    	$('#reqinput').attr('name',reqName).attr('value', reqValue);
+    	datastring = $('#clientdetails_form').serialize();
+    	$.post($('#clientdetails_form').attr('action'), datastring, function(data){
+    		$('.collapsible-body').html(data)
+    	});
+    })
    $("body:contains('')").children(function(){ 
           $(this).css("border","solid 2px red");
       
  });
 </script>
+
+        
