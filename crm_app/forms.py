@@ -70,7 +70,7 @@ def movie():
 	t = views.dotnet_unix().now()
 	i = views.dotnet_unix().from_dotnet(t)
 	m = datetime.fromtimestamp(i)
-	return i
+	return t
 
 class NewTicketForm(forms.ModelForm):
 

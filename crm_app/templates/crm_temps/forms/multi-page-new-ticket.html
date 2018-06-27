@@ -1,26 +1,113 @@
 {% block multi-page-new-ticket %}
-<form method=POST action="{% url 'crm:create_ticket' %}">
+<form method=POST action="{% url 'crm:create_ticket' %}" style='margin:1.5rem; box-shadow: -1px 3px 5px 1px grey;'>
     {% csrf_token %}
-   
-<div id="hotness">
+   {{ ticket.errors }}
+   {{ entries.non_field_errors}}
+
+<div class='v' style='border-bottom:solid grey 2px; margin: 1.5rem;'>
+
+ <div class='row'>
+    <div class='col l4 s12 '>
+        <h6>Enter Title</h6>
+    {{ ticket.ticket_title }}
+    </div>
+    <div class='col l4 offset-l4 s12'>
+        <h6>Tech Name</h6>
+    {{ ticket.technician }}
+    </div>
+ </div>
+
+
+ <div class='row'>
+    <div class='col l4 s12'>
+        <h6>Ticket Start Date</h6>
+    {{ ticket.ticketstartdate }}
+    </div>
+    <div class='col l4 offset-l4 s12'>
+        <h6> Total Time Spent On Ticket</h6>
+        {{ ticket.time_spent_minutes_field }}
+    </div>
 </div>
-{{ ticket }}
-        
+ <div class='row'>
+    <div class='col l6 s12'>
+        <h6>Client Name</h6>
+    {{ ticket.clientid }}
+    </div>
+</div>
+ <div class='row'>
+    <div class='col l4 s12'>
+        <h6>Contact Name</h6>
+    {{ ticket.contact_name }}
+    </div>
+    <div class='col l4 offset-l4 s12'>
+        <h6>Send Complete Email?</h6>
+        <div id="hotness">
+        </div>
+    </div>
+</div>
+ <div class='row'>
+    <div class='col l6 s12'>
+        <h6>Ticket Status</h6>
+    {{ ticket.ticket_status }}
+    </div>
+</div>
+ <div class='row'>
+    <div class='col l6 s12'>
+        <h6>Client Notes</h6>
+    {{ ticket.client_notes }}
+    </div>
+</div>
+ <div class='row'>
+    <div class='col l6 s12'>
+        <h6>Worktype</h6>
+    {{ ticket.worktype }}
+    </div>
+</div>
+ <div class='row'>
+    <div class='col l6 s12'>
+        <h6>Internal Notes</h6>
+    {{ ticket.internal_notes }}
+    </div>
+</div>
+ <div class='row'>
+    <div class='col l4 s12'>
+    {{ ticket.oid }}
+    </div>
+        <div class='col l4 s12'>
+    {{ ticket.timestamp }}
+    </div>
+        <div class='col l4 s12'>
+    {{ ticket.ticketnumber }}
+    </div>
+</div>
+
+
+
+
+</div>
    
-    
+
 {{ entries }}
-<button class="btn waves-effect waves-light" type="submit" name="action">Submit
+<button class="btn waves-effect waves-light" type="submit">Submit
 <i class="material-icons right">send</i>
 </button>
 </form>
+
+
+
+
 <script>
     $('select').formSelect();
-    $('select').formSelect().attr("class","browser-default");
-    
 
-   
-
-    $('#id_ticketstartdate').datepicker();
+    $('#id_startdate').datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $('#id_enddate').datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $('#id_ticketstartdate').datepicker({
+        format: 'yyyy-mm-dd'
+        });
 
     $('#id_clientid').change(function(event){
         if($("#hotness").children().length) {
@@ -46,6 +133,7 @@
                         .append($("<option></option>")
                                 .attr("value",value.fields.contactname)
                                 .text(value.fields.contactname));
+
                 });
         $('#id_contact_name').formSelect();
 

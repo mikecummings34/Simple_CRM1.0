@@ -65,7 +65,7 @@ def new_entry(request):
 			s = entry.save()
 			return HttpResponse('saved')
 
-'''
+
 def create_ticket(request):
 	if request.method == "GET":
 		ticket = NewTicketForm(request.GET)
@@ -76,9 +76,9 @@ def create_ticket(request):
 	if request.method == "POST":
 		ticket = NewTicketForm(request.POST)
 		entries = NewTicketTimeEntries(request.POST)
-		subject = request.POST.get("ticket_title","")
-		message = request.POST.get("notes","")
-		from_email = request.POST.get("emailcomplete","")
+		#subject = request.POST.get("ticket_title","")
+		#message = request.POST.get("notes","")
+		#from_email = request.POST.get("emailcomplete","")
 		if ticket.is_valid() and entries.is_valid():
 			m = ticket.save()
 			entryintance = entries.instance
@@ -90,10 +90,14 @@ def create_ticket(request):
 			entryintance.ticketid = f
 			entries.save()
 			
-			send_mail(subject, message, from_email, ['admin@example.com'])
+			#send_mail(subject, message, from_email, ['admin@example.com'])
 
 			return HttpResponse(entryintance.ticketid)
-'''
+		else:
+			messages.error(request, "Error")
+			return render(request, 'crm_temps/forms/new-ticket.html', {'ticket':ticket})
+
+
 '''
 def client(request):
 	if request.method == "POST":
@@ -241,7 +245,7 @@ def tickets(request):
 ######################################
 #####################################
 ####################################
-class create_ticket(FormView):
+class sdsdcreate_ticket(FormView):
 	form_class = NewTicketForm
 	success_url = '/'
 	template_name = 'crm_temps/forms/new-ticket.html'
@@ -252,6 +256,22 @@ class create_ticket(FormView):
 		context['ticket'] = NewTicketForm(self.request.GET)
 		context['entries'] = NewTicketTimeEntries(self.request.GET)
 		return context
+	def form_valid(self, form):
+		if ticket.is_valid() and entries.is_valid():
+			m = ticket.save()
+			entryintance = entries.instance
+			k = m.timestamp
+			ticket.save()
+			v = Servicetickets.objects.get(timestamp = k)
+			f = v.oid
+			p = entryintance.ticketid
+			entryintance.ticketid = f
+			entries.save()
+			
+			send_mail(subject, message, from_email, ['admin@example.com'])
+
+			return HttpResponse(entryintance.ticketid)
+
 
 
 
