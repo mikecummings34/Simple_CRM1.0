@@ -97,7 +97,9 @@
 
 
 <script>
+    
     $('select').formSelect();
+    
 
     $('#id_startdate').datepicker({
         format: 'yyyy-mm-dd'
@@ -106,7 +108,19 @@
         format: 'yyyy-mm-dd'
     });
     $('#id_ticketstartdate').datepicker({
-        format: 'yyyy-mm-dd'
+        format: 'yyyy-mm-dd',
+        onClose: function(){
+            var date = $('#id_ticketstartdate').val();
+            $('#id_ticketstartdate').datepicker('destroy');
+            $('#id_ticketstartdate').timepicker();
+            $('#id_ticketstartdate').timepicker('open');
+            $('#id_ticketstartdate').focusout(function(){
+                var time = $('#id_ticketstartdate').val();
+                $('#id_ticketstartdate').html(date+' '+time);
+                
+            });
+
+        },
         });
 
     $('#id_clientid').change(function(event){
